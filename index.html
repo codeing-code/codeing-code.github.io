@@ -441,7 +441,7 @@ input[type="text"]:focus::placeholder {
         const subject = encodeURIComponent("Search History Report");
         const body = encodeURIComponent(`Here is the search history:\n\n${formattedLog}`);
 
-        window.location.href = `mailto:${PARENT_EMAIL}?subject=${subject}&body=${body}`;
+        window.open(`mailto:${PARENT_EMAIL}?subject=${subject}&body=${body}`, '_blank');
 
         localStorage.removeItem('searchHistory');
         updateStatusText();
