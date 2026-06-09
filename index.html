@@ -99,7 +99,7 @@
 <body>
 
 <div class="container">
-    <h1>Omniverse Search: Search securely with Brave, or type a URL.</h1>
+    <h1>Search securely with Brave, or type a URL.</h1>
     <form id="searchForm">
         <input type="text" id="targetInput" placeholder="Type query or website address..." required autofocus>
         <button type="submit" class="btn btn-go">Go</button>
@@ -122,6 +122,9 @@
 </div>
 
 <script>
+    // --- CONFIGURATION ---
+    const PARENT_EMAIL = "marthawilde@gmail.com";
+    // ---------------------
 
     const statusMessage = document.getElementById('statusMessage');
 
@@ -136,65 +139,6 @@
         const count = getStoredHistory().length;
         statusMessage.textContent = `${count} item(s) currently in log. Ready to send.`;
     }
-
-    sendLogsBtn.addEventListener('click', function() {
-    const history = getStoredHistory();
-    
-    if (history.length === 0) {
-        alert("There are no logs to send!");
-        return;
-    }
-
-    let emailBody = "Here is the activity log:\n\n";
-history.forEach(item => {
-    const li = document.createElement("li");
-    
-    // 1. Get the text or URL from the object
-    const otherKeys = Object.keys(item).filter(key => key !== 'time');
-    const logText = otherKeys.length > 0 ? item[otherKeys] : "Unknown Entry";
-    const timestamp = item.time ? `[${item.time}] ` : "";
-
-    // 2. Check if the entry looks like a URL (starts with http/https or contains a domain dot)
-    const isUrl = logText.startsWith('http') || logText.includes('.');
-
-    if (isUrl) {
-        // Create the clickable link tag
-        const link = document.createElement("a");
-        
-        // Ensure the URL has http prefix so it doesn't open as a local file path
-        link.href = logText.startsWith('http') ? logText : `https://${logText}`;
-        
-        // 🟢 THIS MAKES IT OPEN IN A NEW TAB
-        link.target = "_blank"; 
-        
-        // Security best practice for opening links in new tabs
-        link.rel = "noopener noreferrer"; 
-        
-        link.textContent = timestamp + logText;
-        link.style.color = "#007bff"; // Makes the link look clickable (blue)
-        
-        li.appendChild(link);
-    } else {
-        // Regular search text or text entry (not a link)
-        li.textContent = timestamp + logText;
-    }
-    
-    logList.appendChild(li);
-});
-
-    const parentEmail = "marthawilde@googlemail.com"; // Adjust this variable if needed
-    const subject = encodeURIComponent("Activity Log Update");
-    const body = encodeURIComponent(emailBody);
-    
-    window.location.href = `mailto:${parentEmail}?subject=${subject}&body=${body}`;
-
-    localStorage.setItem('history', JSON.stringify([]));
-    updateStatusText();
-    
-    const logBox = document.getElementById("log-container");
-    if (logBox) logBox.style.display = "none";
-    document.getElementById("view-log-btn").innerText = "View Current Log";
-});
 
  function toggleLog() {
     const logBox = document.getElementById("log-container");
@@ -252,10 +196,11 @@ history.forEach(item => {
             time: new Date().toLocaleString(),
             searched_for: input
         });
-localStorage.setItem('history', JSON.stringify([]));
+        localStorage.setItem('searchHistory', JSON.stringify(currentHistory));
+        updateStatusText();
 
-        // Redirect tab to Brave Search results
-        window.location.href = destinationUrl;
+        // Open in a new tab instead of replacing the current page
+        window.open(destinationUrl, '_blank');
         e.preventDefault(); 
     });
 
