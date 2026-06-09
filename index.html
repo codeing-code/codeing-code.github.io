@@ -118,6 +118,7 @@ input[type="text"]:focus { border-color: #0071e3; }
 
 <script>
     const PARENT_EMAIL = "marthawilde@gmail.com";
+    const MAX_MAILTO_SIZE = 2000; // Safe limit for mailto body (in characters)
 
     const statusMessage = document.getElementById('statusMessage');
 
@@ -129,6 +130,23 @@ input[type="text"]:focus { border-color: #0071e3; }
     function updateStatusText() {
         const count = getStoredHistory().length;
         statusMessage.textContent = `${count} item(s) currently in log. Ready to send.`;
+    }
+
+    function pruneHistoryIfNeeded(history) {
+        // Keep removing oldest entries until the mailto body fits safely
+        while (history.length > 0) {
+            const formattedLog = history.map(item => `[${item.time}] ${item.searched_for}`).join('\n');
+            const body = encodeURIComponent(`Here is the search history:\n\n${formattedLog}`);
+            
+            // If the body is within safe limits, we're done
+            if (body.length <= MAX_MAILTO_SIZE) {
+                break;
+            }
+            
+            // Remove oldest entry (first in array)
+            history.shift();
+        }
+        return history;
     }
 
     function toggleLog() {
@@ -189,11 +207,22 @@ input[type="text"]:focus { border-color: #0071e3; }
     });
 
     document.getElementById('sendLogsBtn').addEventListener('click', function() {
-        const currentHistory = getStoredHistory();
+        let currentHistory = getStoredHistory();
 
         if (currentHistory.length === 0) {
             statusMessage.textContent = "Log is empty! Nothing to send.";
             statusMessage.style.color = "#ff3b30";
+            return;
+        }
+
+        // Prune history if it exceeds safe mailto size
+        currentHistory = pruneHistoryIfNeeded(currentHistory);
+
+        if (currentHistory.length === 0) {
+            statusMessage.textContent = "Error: Log entries too large to send. Cleared.";
+            statusMessage.style.color = "#ff3b30";
+            localStorage.removeItem('searchHistory');
+            updateStatusText();
             return;
         }
 
