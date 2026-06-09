@@ -1,0 +1,235 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Omniverse</title>
+    <style>
+        /* Styling for the new view log button layout */
+.btn-view-log {
+    background-color: #cf6911; /* Deep purple matching background accent */
+    color: white;
+    margin-top: 12px;
+    width: 100%; /* Ensures identical dimensions to your send button */
+    border: none;
+    cursor: pointer;
+    transition: background 0.2s ease-in-out;
+}
+
+.btn-view-log:hover {
+    background-color: #87601c; /* Darker purple on hover */
+}
+
+/* Styled container for log listings */
+#log-container {
+    margin-top: 20px;
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.08); /* Semi-transparent background */
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    max-height: 180px;
+    overflow-y: auto;
+    width: 100%;
+    box-sizing: border-box;
+}
+
+#log-container h3 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    color: #000000;
+}
+
+#log-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-family: monospace;
+    font-size: 13px;
+    color: #000000;
+}
+
+#log-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+}
+
+        
+        body {
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    
+    /* Change background-color to background-image and add your gradient */
+    background-image: linear-gradient(135deg, #000000, #cf6911); 
+    
+    display: flex;
+    justify-content: center;
+    align-items: center;
+    height: 100vh;
+    margin: 0;
+    flex-direction: column;
+}
+
+        .container {
+            background: white;
+            padding: 30px;
+            border-radius: 16px;
+            box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+            text-align: center;
+            width: 90%;
+            max-width: 450px;
+        }
+        h1 { color: #1d1d1f; font-size: 22px; margin-bottom: 20px; }
+        input[type="text"] {
+            width: 100%; padding: 14px; border: 1px solid #d2d2d7;
+            border-radius: 8px; font-size: 16px; box-sizing: border-box; outline: none;
+        }
+        input[type="text"]:focus { border-color: #0071e3; }
+        .btn {
+            margin-top: 15px; width: 100%; color: white; border: none;
+            padding: 14px; font-size: 16px; border-radius: 8px;
+            cursor: pointer; font-weight: 600; transition: background 0.2s;
+        }
+        .btn-go { background-color: #1d1d1f; }
+        .btn-go:hover { background-color: #333335; }
+        .btn-send { background-color: #0071e3; margin-top: 25px; }
+        .btn-send:hover { background-color: #0077ed; }
+        .status { margin-top: 12px; font-size: 13px; color: #86868b; }
+    </style>
+</head>
+<body>
+
+<div class="container">
+    <h1>Search securely with Brave, or type a URL.</h1>
+    <form id="searchForm">
+        <input type="text" id="targetInput" placeholder="Type query or website address..." required autofocus>
+        <button type="submit" class="btn btn-go">Go</button>
+    </form>
+
+    <!-- Blue button to open Email securely -->
+<button id="sendLogsBtn" class="btn btn-send">Send log to Parents</button>
+<div id="statusMessage" class="status">0 items currently in log. Ready to send.</div>
+
+<!-- MATCHING ACTION BUTTON -->
+<button id="view-log-btn" class="btn btn-view-log" onclick="toggleLog()">View Current Log</button>
+
+<!-- Container for items -->
+<div id="log-container" class="hidden-log" style="display:none;">
+    <h3>Activity Log</h3>
+    <ul id="log-list"></ul>
+</div>
+
+ 
+</div>
+
+<script>
+    // --- CONFIGURATION ---
+    const PARENT_EMAIL = "marthawilde@gmail.com";
+    // ---------------------
+
+    const statusMessage = document.getElementById('statusMessage');
+
+    // Reads history saved locally in your Chromebook's browser storage
+    function getStoredHistory() {
+        const history = localStorage.getItem('searchHistory');
+        return history ? JSON.parse(history) : [];
+    }
+
+    // Updates the counter on screen
+    function updateStatusText() {
+        const count = getStoredHistory().length;
+        statusMessage.textContent = `${count} item(s) currently in log. Ready to send.`;
+    }
+
+ function toggleLog() {
+    const logBox = document.getElementById("log-container");
+    const btn = document.getElementById("view-log-btn");
+    const logList = document.getElementById("log-list");
+    
+    if (logBox.classList.contains("hidden-log")) {
+        logList.innerHTML = ""; 
+        const history = getStoredHistory(); 
+        
+        if (history.length === 0) {
+            logList.innerHTML = "<li style='color: #333;'>No items currently logged.</li>";
+        } else {
+            history.forEach(item => {
+                const li = document.createElement("li");
+                
+                // Automatically find any property key that isn't 'time'
+                const otherKeys = Object.keys(item).filter(key => key !== 'time');
+                // Grab the value of that key, or fallback to 'Unknown Entry'
+                const logText = otherKeys.length > 0 ? item[otherKeys[0]] : "Unknown Entry";
+                
+                li.textContent = item.time ? `[${item.time}] ${logText}` : logText;
+                logList.appendChild(li);
+            });
+        }
+        
+        logBox.classList.remove("hidden-log");
+        logBox.classList.add("visible-log");
+        logBox.style.display = "block";
+        btn.innerText = "Hide Current Log";
+    } else {
+        logBox.classList.remove("visible-log");
+        logBox.classList.add("hidden-log");
+        logBox.style.display = "none";
+        btn.innerText = "View Current Log";
+    }
+}
+
+
+
+    // 1. CAPTURE LOG & REDIRECT TO BRAVE
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        const input = document.getElementById('targetInput').value.trim();
+        let destinationUrl = "";
+
+        if (input.includes('.') && !input.includes(' ')) {
+            destinationUrl = input.startsWith('http') ? input : 'https://' + input;
+        } else {
+            destinationUrl = 'https://search.brave.com/search?q=' + encodeURIComponent(input) + '&source=web';
+        }
+
+        // Add item to local history array
+        const currentHistory = getStoredHistory();
+        currentHistory.push({
+            time: new Date().toLocaleString(),
+            searched_for: input
+        });
+localStorage.setItem('history', JSON.stringify([]));
+
+        // Redirect tab to Brave Search results
+        window.location.href = destinationUrl;
+        e.preventDefault(); 
+    });
+
+    // 2. THE BLUE BUTTON: BUNDLE LOGS AND OPEN LOCAL GMAIL
+    document.getElementById('sendLogsBtn').addEventListener('click', function() {
+        const currentHistory = getStoredHistory();
+
+        if (currentHistory.length === 0) {
+            statusMessage.textContent = "Log is empty! Nothing to send.";
+            statusMessage.style.color = "#ff3b30";
+            return;
+        }
+
+        // Format history items into clean text rows
+        const formattedLog = currentHistory.map(item => `[${item.time}] ${item.searched_for}`).join('\n');
+        
+        const subject = encodeURIComponent("Search History Report");
+        const body = encodeURIComponent(`Here is the search history:\n\n${formattedLog}`);
+
+        // Open your Chromebook's official Gmail window with everything filled out
+        window.location.href = `mailto:${PARENT_EMAIL}?subject=${subject}&body=${body}`;
+
+        // Clear local storage since the data is now inside the email window
+        localStorage.removeItem('searchHistory');
+        updateStatusText();
+    });
+
+    // Load initial history count
+    updateStatusText();
+</script>
+
+</body>
+</html>
