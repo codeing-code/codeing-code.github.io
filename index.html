@@ -453,9 +453,9 @@ input[type="text"]:focus::placeholder {
     <h1>Omniverse</h1>
     <p class="subtitle">Private Search Engine</p>
 
-    <form id="searchForm">
+<form id="searchForm" autocomplete="off">
         <div class="search-input-wrapper">
-            <input type="text" id="targetInput" placeholder="Search or enter a URL..." required autofocus>
+            <input type="text" id="targetInput" placeholder="Search or enter a URL..." required autofocus autocomplete="nope">
         </div>
     </form>
 
