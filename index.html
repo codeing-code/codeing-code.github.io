@@ -3,42 +3,30 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Omniverse - Private Search Engine</title>
-    <link rel="icon" type="image/png" href="https://avatars.githubusercontent.com/u/57824658?s=200&v=4">
+    <title>Omniverse</title>
+    <link rel="icon" type="image/jpeg" href="https://files.aecplustech.com/eyJidWNrZXQiOiJhZWNwbHVzdGVjaC1maWxlcyIsImtleSI6InByb2ZpbGUvY2M3MjJjYzYtNzEzZi00MjM1LTkxYzgtOGYwMDYyMTcxZDNmLmpwZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6NDAwLCJmaXQiOiJjb250YWluIn19fQ==">
     <style>
 * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
-    box-sizing: border-box;
 }
 
-:root {
-    --primary: #00d4ff;
-    --secondary: #ff6b9d;
-    --accent: #a78bfa;
-    --dark-bg: #0a0f27;
-    --card-bg: rgba(255, 255, 255, 0.08);
-    --card-border: rgba(255, 255, 255, 0.15);
-    --text-primary: #ffffff;
-    --text-secondary: #e0e7ff;
-}
-
-/* Animations */
+/* Smooth easing functions (Apple-style) */
 @keyframes fadeInScale {
     from {
         opacity: 0;
-        transform: scale(0.85) translateY(20px);
+        transform: scale(0.95);
     }
     to {
         opacity: 1;
-        transform: scale(1) translateY(0);
+        transform: scale(1);
     }
 }
 
 @keyframes slideInUp {
     from {
         opacity: 0;
-        transform: translateY(30px);
+        transform: translateY(10px);
     }
     to {
         opacity: 1;
@@ -46,37 +34,32 @@
     }
 }
 
-@keyframes floatUp {
-    0%, 100% {
-        transform: translateY(0px);
+@keyframes expandHeight {
+    from {
+        opacity: 0;
+        max-height: 0;
     }
-    50% {
-        transform: translateY(-10px);
-    }
-}
-
-@keyframes glowPulse {
-    0%, 100% {
-        box-shadow: 0 0 20px rgba(0, 212, 255, 0.3), 0 0 40px rgba(255, 107, 157, 0.1);
-    }
-    50% {
-        box-shadow: 0 0 40px rgba(0, 212, 255, 0.5), 0 0 80px rgba(255, 107, 157, 0.2);
+    to {
+        opacity: 1;
+        max-height: 500px;
     }
 }
 
-@keyframes shimmer {
-    0% {
-        background-position: -1000px 0;
+@keyframes collapseHeight {
+    from {
+        opacity: 1;
+        max-height: 500px;
     }
-    100% {
-        background-position: 1000px 0;
+    to {
+        opacity: 0;
+        max-height: 0;
     }
 }
 
 @keyframes listItemFadeIn {
     from {
         opacity: 0;
-        transform: translateX(-15px);
+        transform: translateX(-8px);
     }
     to {
         opacity: 1;
@@ -84,150 +67,152 @@
     }
 }
 
+.btn-view-log {
+    background-color: #cf6911;
+    color: white;
+    margin-top: 12px;
+    width: 100%;
+    border: none;
+    cursor: pointer;
+    font-weight: 600;
+    border-radius: 8px;
+    padding: 14px;
+    font-size: 16px;
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-view-log:hover {
+    background-color: #87601c;
+    transform: translateY(-1px);
+    box-shadow: 0 8px 20px rgba(207, 105, 17, 0.25);
+}
+
+.btn-view-log:active {
+    transform: translateY(0);
+    box-shadow: 0 4px 10px rgba(207, 105, 17, 0.2);
+}
+
+#log-container {
+    margin-top: 20px;
+    text-align: left;
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
+    max-height: 180px;
+    overflow-y: auto;
+    width: 100%;
+    box-sizing: border-box;
+    animation: expandHeight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#log-container.collapsing {
+    animation: collapseHeight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#log-container h3 {
+    margin: 0 0 10px 0;
+    font-size: 20px;
+    color: #000000;
+    font-weight: 600;
+}
+
+#log-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-family: monospace;
+    font-size: 13px;
+    color: #000000;
+}
+
+#log-list li {
+    padding: 6px 0;
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
+    animation: listItemFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+}
+
+#log-list li:nth-child(1) { animation-delay: 0.05s; }
+#log-list li:nth-child(2) { animation-delay: 0.1s; }
+#log-list li:nth-child(3) { animation-delay: 0.15s; }
+#log-list li:nth-child(4) { animation-delay: 0.2s; }
+#log-list li:nth-child(5) { animation-delay: 0.25s; }
+#log-list li:nth-child(n+6) { animation-delay: 0.3s; }
+
 body {
-    font-family: 'Segoe UI', Roboto, 'Helvetica Neue', sans-serif;
-    background: linear-gradient(135deg, #0a0f27 0%, #1a1a3e 25%, #2d1a4e 75%, #0f0f2e 100%);
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
+    background-image: linear-gradient(135deg, #000000, #cf6911); 
     display: flex;
     justify-content: center;
     align-items: center;
-    min-height: 100vh;
+    height: 100vh;
     margin: 0;
-    padding: 20px;
-    position: relative;
-    overflow-x: hidden;
-    color: var(--text-primary);
+    flex-direction: column;
 }
 
-/* Animated background particles */
-body::before {
-    content: '';
-    position: fixed;
-    top: 0;
-    left: 0;
-    width: 100%;
-    height: 100%;
-    background: 
-        radial-gradient(circle at 20% 50%, rgba(0, 212, 255, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 80% 80%, rgba(255, 107, 157, 0.1) 0%, transparent 50%),
-        radial-gradient(circle at 40% 20%, rgba(167, 139, 250, 0.05) 0%, transparent 50%);
-    animation: floatUp 6s ease-in-out infinite;
-    pointer-events: none;
-    z-index: 0;
-}
-
-/* Container with liquid glass effect */
 .container {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(16px);
-    -webkit-backdrop-filter: blur(16px);
-    padding: 50px 40px;
-    border-radius: 28px;
-    box-shadow: 
-        0 8px 32px rgba(0, 0, 0, 0.3),
-        0 0 1px rgba(255, 255, 255, 0.15) inset,
-        0 0 60px rgba(0, 212, 255, 0.08);
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
     text-align: center;
-    width: 100%;
-    max-width: 520px;
-    animation: fadeInScale 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    z-index: 10;
-    border: 1px solid rgba(255, 255, 255, 0.12);
+    width: 90%;
+    max-width: 450px;
+    animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-h1 {
-    color: var(--text-primary);
-    font-size: 42px;
-    margin: 0 0 8px 0;
-    font-weight: 800;
-    letter-spacing: -1px;
-    animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1);
-    background: linear-gradient(135deg, #00d4ff, #ff6b9d, #a78bfa);
-    -webkit-background-clip: text;
-    -webkit-text-fill-color: transparent;
-    background-clip: text;
-    background-size: 300% 300%;
-    animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1), glowPulse 4s ease-in-out infinite;
-}
-
-.subtitle {
-    color: var(--text-secondary);
-    font-size: 14px;
-    margin-bottom: 32px;
-    animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
-    text-transform: uppercase;
-    letter-spacing: 2px;
-    font-weight: 500;
-    opacity: 0.8;
-}
-
-.search-input-wrapper {
-    position: relative;
-    width: 100%;
-    margin-bottom: 24px;
+h1 { 
+    color: #1d1d1f; 
+    font-size: 22px; 
+    margin-bottom: 20px; 
+    font-weight: 700;
+    letter-spacing: -0.3px;
+    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 input[type="text"] {
-    width: 100%;
-    padding: 16px 22px;
-    border: 1.5px solid rgba(255, 255, 255, 0.2);
-    border-radius: 14px;
-    font-size: 16px;
+    width: 100%; 
+    padding: 14px; 
+    border: 1px solid #d2d2d7;
+    border-radius: 8px; 
+    font-size: 16px; 
+    box-sizing: border-box; 
     outline: none;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.15s both;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    color: var(--text-primary);
-    box-shadow: 0 0 20px rgba(0, 0, 0, 0.2);
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
+    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+}
+
+input[type="text"]:focus { 
+    border-color: #0071e3;
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
+    transform: scale(1.01);
 }
 
 input[type="text"]::placeholder {
-    color: rgba(255, 255, 255, 0.5);
-}
-
-input[type="text"]:focus {
-    border-color: rgba(0, 212, 255, 0.6);
-    background: rgba(255, 255, 255, 0.1);
-    box-shadow: 
-        0 0 20px rgba(0, 212, 255, 0.3),
-        0 8px 32px rgba(0, 0, 0, 0.2);
-    transform: translateY(-2px);
+    color: #a1a1a6;
+    transition: color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 input[type="text"]:focus::placeholder {
-    color: rgba(255, 255, 255, 0.7);
-}
-
-.btn-group {
-    display: flex;
-    flex-direction: column;
-    gap: 14px;
-    margin-top: 32px;
-}
-
-.btn-row {
-    display: flex;
-    gap: 14px;
+    color: #d2d2d7;
 }
 
 .btn {
-    flex: 1;
-    color: white;
+    margin-top: 15px; 
+    width: 100%; 
+    color: white; 
     border: none;
-    padding: 16px 24px;
-    font-size: 15px;
-    border-radius: 12px;
-    cursor: pointer;
-    font-weight: 700;
-    transition: all 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    padding: 14px; 
+    font-size: 16px; 
+    border-radius: 8px;
+    cursor: pointer; 
+    font-weight: 600; 
+    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
-    animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    text-transform: uppercase;
-    letter-spacing: 0.5px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .btn::before {
@@ -238,289 +223,141 @@ input[type="text"]:focus::placeholder {
     width: 0;
     height: 0;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.3);
     transform: translate(-50%, -50%);
-    transition: width 0.6s, height 0.6s;
+    transition: width 0.5s, height 0.5s;
 }
 
 .btn:active::before {
-    width: 400px;
-    height: 400px;
+    width: 300px;
+    height: 300px;
 }
 
-.btn-go {
-    background: linear-gradient(135deg, rgba(0, 212, 255, 0.8), rgba(0, 180, 219, 0.8));
-    box-shadow: 
-        0 8px 32px rgba(0, 212, 255, 0.3),
-        0 0 20px rgba(0, 212, 255, 0.2);
+.btn-go { 
+    background-color: #1d1d1f;
+    margin-top: 15px;
     animation-delay: 0.2s;
 }
 
-.btn-go:hover {
-    transform: translateY(-4px);
-    box-shadow: 
-        0 12px 40px rgba(0, 212, 255, 0.4),
-        0 0 30px rgba(0, 212, 255, 0.3);
-    background: linear-gradient(135deg, rgba(0, 212, 255, 1), rgba(0, 180, 219, 1));
+.btn-go:hover { 
+    background-color: #333335;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
 }
 
 .btn-go:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
 
-.btn-send {
-    background: linear-gradient(135deg, rgba(255, 107, 157, 0.8), rgba(245, 95, 145, 0.8));
-    box-shadow: 
-        0 8px 32px rgba(255, 107, 157, 0.3),
-        0 0 20px rgba(255, 107, 157, 0.2);
+.btn-send { 
+    background-color: #0071e3;
+    margin-top: 25px;
     animation-delay: 0.3s;
 }
 
-.btn-send:hover {
-    transform: translateY(-4px);
-    box-shadow: 
-        0 12px 40px rgba(255, 107, 157, 0.4),
-        0 0 30px rgba(255, 107, 157, 0.3);
-    background: linear-gradient(135deg, rgba(255, 107, 157, 1), rgba(245, 95, 145, 1));
+.btn-send:hover { 
+    background-color: #0077ed;
+    transform: translateY(-2px);
+    box-shadow: 0 12px 28px rgba(0, 113, 227, 0.25);
 }
 
 .btn-send:active {
-    transform: translateY(-1px);
+    transform: translateY(0);
+    box-shadow: 0 6px 14px rgba(0, 113, 227, 0.2);
 }
 
-.btn-view-log {
-    background: linear-gradient(135deg, rgba(167, 139, 250, 0.8), rgba(139, 92, 246, 0.8));
-    box-shadow: 
-        0 8px 32px rgba(167, 139, 250, 0.3),
-        0 0 20px rgba(167, 139, 250, 0.2);
-    animation-delay: 0.4s;
-    width: 100%;
-}
-
-.btn-view-log:hover {
-    transform: translateY(-4px);
-    box-shadow: 
-        0 12px 40px rgba(167, 139, 250, 0.4),
-        0 0 30px rgba(167, 139, 250, 0.3);
-    background: linear-gradient(135deg, rgba(167, 139, 250, 1), rgba(139, 92, 246, 1));
-}
-
-.btn-view-log:active {
-    transform: translateY(-1px);
-}
-
-#log-container {
-    margin-top: 28px;
-    background: rgba(255, 255, 255, 0.05);
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
-    padding: 24px;
-    border-radius: 16px;
-    border: 1px solid rgba(255, 255, 255, 0.1);
-    max-height: 320px;
-    overflow-y: auto;
-    width: 100%;
-    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.2);
-}
-
-#log-container.collapsing {
-    animation: slideInUp 0.3s cubic-bezier(0.16, 1, 0.3, 1) reverse;
-}
-
-#log-container h3 {
-    margin: 0 0 16px 0;
-    font-size: 14px;
-    color: var(--text-primary);
-    font-weight: 700;
-    text-transform: uppercase;
-    letter-spacing: 1px;
-}
-
-#log-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-family: 'Fira Code', 'Courier New', monospace;
-    font-size: 13px;
-}
-
-#log-list li {
-    padding: 10px 14px;
-    border-left: 3px solid var(--primary);
-    margin-bottom: 8px;
-    background: rgba(0, 212, 255, 0.05);
-    border-radius: 8px;
-    color: var(--text-secondary);
-    animation: listItemFadeIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    transition: all 0.3s ease;
-}
-
-#log-list li:hover {
-    background: rgba(0, 212, 255, 0.15);
-    transform: translateX(4px);
-    color: var(--text-primary);
-    border-left-color: var(--secondary);
-}
-
-#log-list li:nth-child(1) { animation-delay: 0.05s; }
-#log-list li:nth-child(2) { animation-delay: 0.1s; }
-#log-list li:nth-child(3) { animation-delay: 0.15s; }
-#log-list li:nth-child(4) { animation-delay: 0.2s; }
-#log-list li:nth-child(5) { animation-delay: 0.25s; }
-#log-list li:nth-child(n+6) { animation-delay: 0.3s; }
-
-.status {
-    margin-top: 20px;
-    font-size: 13px;
-    color: var(--text-secondary);
+.status { 
+    margin-top: 12px; 
+    font-size: 13px; 
+    color: #86868b;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation: slideInUp 0.8s cubic-bezier(0.34, 1.56, 0.64, 1) 0.4s both;
-    letter-spacing: 0.5px;
-    text-transform: uppercase;
-    font-weight: 600;
+    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s both;
+    letter-spacing: 0.3px;
 }
 
 .status.error {
-    color: #ff6b6b;
+    color: #ff3b30;
+    animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-.status.success {
-    color: #51cf66;
-}
-
-/* Scrollbar styling */
-#log-list::-webkit-scrollbar,
+/* Scroll smooth behavior */
+#log-list::-webkit-scrollbar {
     width: 6px;
 }
 
-#log-list::-webkit-scrollbar-track,
+#log-list::-webkit-scrollbar-track {
     background: transparent;
 }
 
-#log-list::-webkit-scrollbar-thumb,
-    background: rgba(0, 212, 255, 0.3);
+#log-list::-webkit-scrollbar-thumb {
+    background: rgba(0, 0, 0, 0.1);
     border-radius: 3px;
-    transition: background 0.3s;
+    transition: background 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-#log-list::-webkit-scrollbar-thumb:hover,
-    background: rgba(0, 212, 255, 0.6);
-}
-
-@media (max-width: 480px) {
-    .container {
-        padding: 32px 24px;
-        border-radius: 20px;
-    }
-
-    h1 {
-        font-size: 32px;
-    }
-
-    .subtitle {
-        font-size: 12px;
-        letter-spacing: 1.5px;
-    }
-
-    .btn {
-        padding: 14px 20px;
-        font-size: 14px;
-    }
-
-    .btn-row {
-        flex-direction: column;
-    }
-
-    input[type="text"] {
-        padding: 14px 18px;
-        font-size: 16px;
-    }
-}
-
-@media (prefers-reduced-motion: reduce) {
-    * {
-        animation-duration: 0.01ms !important;
-        animation-iteration-count: 1 !important;
-        transition-duration: 0.01ms !important;
-    }
+#log-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(0, 0, 0, 0.2);
 }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Omniverse</h1>
-    <p class="subtitle">Private Search Engine</p>
-
-<form id="searchForm" autocomplete="off">
-        <div class="search-input-wrapper">
-            <input type="text" id="targetInput" placeholder="Search or enter a URL..." required autofocus autocomplete="nope">
-        </div>
+    <h1>Search securely with Brave, or type a URL.</h1>
+    <form id="searchForm">
+        <input type="text" id="targetInput" placeholder="Type query or website address..." required autofocus>
+        <button type="submit" class="btn btn-go">Go</button>
     </form>
 
-    <div class="btn-group">
-        <button type="submit" form="searchForm" class="btn btn-go">Go</button>
+    <form autocomplete="off" method="post" action="">
+        <input autocomplete="false" name="hidden" type="text" style="display:none;">
+    </form>
+    
 
-        <div class="btn-row">
-            <button id="sendLogsBtn" class="btn btn-send">Send Log</button>
-            <button id="view-log-btn" class="btn btn-view-log">View Log</button>
-        </div>
-    </div>
+<button id="sendLogsBtn" class="btn btn-send">Send log to Parents</button>
+    
+<button id="sendLogsBtn" class="btn btn-send">Send log</button>
+<div id="statusMessage" class="status">0 items currently in log. Ready to send.</div>
 
-    <div id="statusMessage" class="status">Ready to search</div>
+<button id="view-log-btn" class="btn btn-view-log" onclick="toggleLog()">View Current Log</button>
 
-    <div id="log-container" style="display:none;">
-        <h3>Activity Log</h3>
-        <ul id="log-list"></ul>
-    </div>
+<div id="log-container" class="hidden-log" style="display:none;">
+    <h3>Activity Log</h3>
+    <ul id="log-list"></ul>
+</div>
+
 </div>
 
 <script>
     const PARENT_EMAIL = "marthawilde@gmail.com";
-    const MAX_MAILTO_SIZE = 2000;
+    const MAX_MAILTO_SIZE = 2000; // Safe limit for mailto body (in characters)
 
     const statusMessage = document.getElementById('statusMessage');
-    const targetInput = document.getElementById('targetInput');
-    const autocompleteList = document.getElementById('autocomplete-list');
-    const searchForm = document.getElementById('searchForm');
 
     function getStoredHistory() {
-        try {
-            const history = localStorage.getItem('searchHistory');
-            return history ? JSON.parse(history) : [];
-        } catch (e) {
-            console.warn('Failed to retrieve history:', e);
-            return [];
-        }
-    }
-
-    function saveHistory(history) {
-        try {
-            localStorage.setItem('searchHistory', JSON.stringify(history));
-        } catch (e) {
-            console.warn('Failed to save history:', e);
-        }
+        const history = localStorage.getItem('searchHistory');
+        return history ? JSON.parse(history) : [];
     }
 
     function updateStatusText() {
         const count = getStoredHistory().length;
-        if (count === 0) {
-            statusMessage.textContent = 'Ready to search';
-            statusMessage.classList.remove('error', 'success');
-        } else {
-            statusMessage.textContent = `${count} item${count !== 1 ? 's' : ''} in log`;
-            statusMessage.classList.remove('error');
-            statusMessage.classList.add('success');
-        }
+        statusMessage.textContent = `${count} item(s) currently in log. Ready to send.`;
+        statusMessage.classList.remove('error');
     }
 
     function pruneHistoryIfNeeded(history) {
-        const originalLength = history.length;
+        // Keep removing oldest entries until the mailto body fits safely
         while (history.length > 0) {
             const formattedLog = history.map(item => `[${item.time}] ${item.searched_for}`).join('\n');
             const body = encodeURIComponent(`Here is the search history:\n\n${formattedLog}`);
-            if (body.length <= MAX_MAILTO_SIZE) break;
+
+            // If the body is within safe limits, we're done
+            if (body.length <= MAX_MAILTO_SIZE) {
+                break;
+            }
+
+            // Remove oldest entry (first in array)
             history.shift();
         }
         return history;
@@ -531,151 +368,91 @@ input[type="text"]:focus::placeholder {
         const btn = document.getElementById("view-log-btn");
         const logList = document.getElementById("log-list");
 
-        if (logBox.style.display === 'none') {
-            logList.innerHTML = "";
-            const history = getStoredHistory();
+        if (logBox.classList.contains("hidden-log")) {
+            logList.innerHTML = ""; 
+            const history = getStoredHistory(); 
 
             if (history.length === 0) {
-                logList.innerHTML = "<li style='border-left-color: rgba(255,255,255,0.2); background: rgba(255,255,255,0.02);'>No items logged yet</li>";
+                logList.innerHTML = "<li style='color: #333;'>No items currently logged.</li>";
             } else {
                 history.forEach(item => {
                     const li = document.createElement("li");
-                    li.textContent = `[${item.time}] ${item.searched_for}`;
+
+                    const otherKeys = Object.keys(item).filter(key => key !== 'time');
+                    const logText = otherKeys.length > 0 ? item[otherKeys[0]] : "Unknown Entry";
+
+                    li.textContent = item.time ? `[${item.time}] ${logText}` : logText;
                     logList.appendChild(li);
                 });
             }
 
+            logBox.classList.remove("hidden-log");
+            logBox.classList.add("visible-log");
             logBox.style.display = "block";
-            btn.textContent = "Hide Log";
+            btn.innerText = "Hide Current Log";
         } else {
             logBox.classList.add("collapsing");
             setTimeout(() => {
-                logBox.style.display = "none";
+                logBox.classList.remove("visible-log");
+                logBox.classList.add("hidden-log");
                 logBox.classList.remove("collapsing");
-                btn.textContent = "View Log";
+                logBox.style.display = "none";
+                btn.innerText = "View Current Log";
             }, 300);
         }
     }
 
-    document.getElementById('view-log-btn').addEventListener('click', toggleLog);
-
-    function fetchAutocompleteSuggestions(query) {
-        if (query.trim().length < 1) {
-            autocompleteList.classList.remove('show');
-            return;
-        }
-
-        const lowerQuery = query.toLowerCase();
-        const suggestions = localSuggestions.filter(s =>
-            s.toLowerCase().includes(lowerQuery)
-        ).slice(0, 8);
-
-        if (suggestions.length > 0) {
-            displayAutocompleteSuggestions(suggestions);
-        } else {
-            autocompleteList.classList.remove('show');
-        }
-    }
-
-    function displayAutocompleteSuggestions(suggestions) {
-        autocompleteList.innerHTML = '';
-
-        suggestions.forEach(suggestion => {
-            const li = document.createElement('li');
-            li.textContent = suggestion;
-            li.addEventListener('click', () => {
-                targetInput.value = suggestion;
-                autocompleteList.classList.remove('show');
-            });
-            autocompleteList.appendChild(li);
-        });
-
-        autocompleteList.classList.add('show');
-    }
-
-    let autocompleteTimeout;
-    targetInput.addEventListener('input', function() {
-        clearTimeout(autocompleteTimeout);
-        autocompleteTimeout = setTimeout(() => {
-            fetchAutocompleteSuggestions(this.value);
-        }, 150);
-    });
-
-    targetInput.addEventListener('focus', function() {
-        if (this.value.trim().length > 0) {
-            fetchAutocompleteSuggestions(this.value);
-        }
-    });
-
-    document.addEventListener('click', function(event) {
-        if (event.target !== targetInput && !autocompleteList.contains(event.target)) {
-            autocompleteList.classList.remove('show');
-        }
-    });
-
-    searchForm.addEventListener('submit', function(e) {
-        e.preventDefault();
-
-        const input = targetInput.value.trim();
-        if (!input) return;
-
+    document.getElementById('searchForm').addEventListener('submit', function(e) {
+        const input = document.getElementById('targetInput').value.trim();
         let destinationUrl = "";
+
         if (input.includes('.') && !input.includes(' ')) {
             destinationUrl = input.startsWith('http') ? input : 'https://' + input;
         } else {
-            destinationUrl = 'https://search.brave.com/search?q=' + encodeURIComponent(input);
+            destinationUrl = 'https://search.brave.com/search?q=' + encodeURIComponent(input) + '&source=web';
         }
 
         const currentHistory = getStoredHistory();
         currentHistory.push({
-            time: new Date().toLocaleString('en-US', {
-                month: '2-digit',
-                day: '2-digit',
-                year: '2-digit',
-                hour: '2-digit',
-                minute: '2-digit',
-                second: '2-digit'
-            }),
+            time: new Date().toLocaleString(),
             searched_for: input
         });
-        saveHistory(currentHistory);
+        localStorage.setItem('searchHistory', JSON.stringify(currentHistory));
         updateStatusText();
 
         window.open(destinationUrl, '_blank');
-        targetInput.value = '';
-        autocompleteList.classList.remove('show');
+        e.preventDefault(); 
     });
 
     document.getElementById('sendLogsBtn').addEventListener('click', function() {
         let currentHistory = getStoredHistory();
 
         if (currentHistory.length === 0) {
-            statusMessage.textContent = "Log is empty";
+            statusMessage.textContent = "Log is empty! Nothing to send.";
             statusMessage.classList.add('error');
-            setTimeout(() => updateStatusText(), 3000);
             return;
         }
 
+        // Prune history if it exceeds safe mailto size
         currentHistory = pruneHistoryIfNeeded(currentHistory);
 
         if (currentHistory.length === 0) {
-            statusMessage.textContent = "Entries too large to send";
+            statusMessage.textContent = "Error: Log entries too large to send. Cleared.";
             statusMessage.classList.add('error');
-            saveHistory([]);
-            setTimeout(() => updateStatusText(), 3000);
+            localStorage.removeItem('searchHistory');
+            updateStatusText();
             return;
         }
 
         const formattedLog = currentHistory.map(item => `[${item.time}] ${item.searched_for}`).join('\n');
+
         const subject = encodeURIComponent("Search History Report");
         const body = encodeURIComponent(`Here is the search history:\n\n${formattedLog}`);
 
-        window.open(`mailto:${PARENT_EMAIL}?subject=${subject}&body=${body}`);
+        window.open(`mailto:${PARENT_EMAIL}?subject=${subject}&body=${body}`, '_blank');
 
-        statusMessage.textContent = "Log sent successfully";
-        statusMessage.classList.add('success');
-        saveHistory([]);
-        setTimeout(() => updateStatusText(), 3000);
+        localStorage.removeItem('searchHistory');
+        updateStatusText();
     });
 
     updateStatusText();
