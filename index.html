@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Omniverse</title>
-    <link rel="icon" type="image/jpeg" href="https://files.aecplustech.com/eyJidWNrZXQiOiJhZWNwbHVzdGVjaC1maWxlcyIsImtleSI6InByb2ZpbGUvY2M3MjJjYzYtNzEzZi00MjM1LTkxYzgtOGYwMDYyMTcxZDNmLmpwZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6NDAwLCJmaXQiOiJjb250YWluIn19fQ==">
+    <link rel="icon" type="image/jpeg" href="https://files.aecplustech.com/eyJidWNrZXQiOiJhZWNwbHVzdGVjaC1maWxlcyIsImtleSI6InByb2ZpbGUvY2M3MjJjYzYtNzEzZi00MjM1LTkxYzgtOGYwMDYyMTcxZDNmLmpwZyIsImVkaXRzI[...]
     <style>
 * {
     -webkit-font-smoothing: antialiased;
@@ -327,6 +327,7 @@ input[type="text"]:focus::placeholder {
     const MAX_MAILTO_SIZE = 2000; // Safe limit for mailto body (in characters)
 
     const statusMessage = document.getElementById('statusMessage');
+    const targetInput = document.getElementById('targetInput');
 
     function getStoredHistory() {
         const history = localStorage.getItem('searchHistory');
@@ -396,7 +397,7 @@ input[type="text"]:focus::placeholder {
     }
 
     document.getElementById('searchForm').addEventListener('submit', function(e) {
-        const input = document.getElementById('targetInput').value.trim();
+        const input = targetInput.value.trim();
         let destinationUrl = "";
 
         if (input.includes('.') && !input.includes(' ')) {
@@ -414,6 +415,10 @@ input[type="text"]:focus::placeholder {
         updateStatusText();
 
         window.open(destinationUrl, '_blank');
+        
+        // Clear the input field
+        targetInput.value = '';
+        
         e.preventDefault(); 
     });
 
