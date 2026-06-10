@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Omniverse</title>
-    <link rel="icon" type="image/jpeg" href="https://files.aecplustech.com/eyJidWNrZXQiOiJhZWNwbHVzdGVjaC1maWxlcyIsImtleSI6InByb2ZpbGUvY2M3MjJjYzYtNzEzZi00MjM1LTkxYzgtOGYwMDYyMTcxZDNmLmpwZyIsImVkaXRzI[...]
+    <link rel="icon" type="image/jpeg" href="https://files.aecplustech.com/eyJidWNrZXQiOiJhZWNwbHVzdGVjaC1maWxlcyIsImtleSI6InByb2ZpbGUvY2M3MjJjYzYtNzEzZi00MjM1LTkxYzgtOGYwMDYyMTcxZDNmLmpwZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6NDAwLCJmaXQiOiJjb250YWluIn19fQ==">
     <style>
 * {
     -webkit-font-smoothing: antialiased;
@@ -67,26 +67,15 @@
     }
 }
 
-@keyframes shimmer {
-    0% {
-        background-position: -1000px 0;
-    }
-    100% {
-        background-position: 1000px 0;
-    }
-}
-
 .btn-view-log {
-    background: rgba(207, 105, 17, 0.2);
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
+    background-color: #cf6911;
     color: white;
     margin-top: 12px;
     width: 100%;
-    border: 1px solid rgba(255, 255, 255, 0.3);
+    border: none;
     cursor: pointer;
     font-weight: 600;
-    border-radius: 12px;
+    border-radius: 8px;
     padding: 14px;
     font-size: 16px;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
@@ -95,32 +84,28 @@
 }
 
 .btn-view-log:hover {
-    background: rgba(207, 105, 17, 0.3);
-    border-color: rgba(255, 255, 255, 0.5);
+    background-color: #87601c;
     transform: translateY(-1px);
-    box-shadow: 0 20px 40px rgba(207, 105, 17, 0.2);
+    box-shadow: 0 8px 20px rgba(207, 105, 17, 0.25);
 }
 
 .btn-view-log:active {
     transform: translateY(0);
-    box-shadow: 0 10px 20px rgba(207, 105, 17, 0.15);
+    box-shadow: 0 4px 10px rgba(207, 105, 17, 0.2);
 }
 
 #log-container {
     margin-top: 20px;
     text-align: left;
-    background: rgba(255, 255, 255, 0.1);
-    backdrop-filter: blur(30px);
-    -webkit-backdrop-filter: blur(30px);
-    padding: 20px;
-    border-radius: 20px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
+    background-color: rgba(255, 255, 255, 0.08);
+    padding: 15px;
+    border-radius: 8px;
+    border: 1px solid rgba(255, 255, 255, 0.15);
     max-height: 180px;
     overflow-y: auto;
     width: 100%;
     box-sizing: border-box;
     animation: expandHeight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-    box-shadow: inset 0 2px 10px rgba(255, 255, 255, 0.1);
 }
 
 #log-container.collapsing {
@@ -130,7 +115,7 @@
 #log-container h3 {
     margin: 0 0 10px 0;
     font-size: 20px;
-    color: rgba(255, 255, 255, 0.95);
+    color: #000000;
     font-weight: 600;
 }
 
@@ -140,12 +125,12 @@
     margin: 0;
     font-family: monospace;
     font-size: 13px;
-    color: rgba(255, 255, 255, 0.85);
+    color: #000000;
 }
 
 #log-list li {
     padding: 6px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.1);
+    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
     animation: listItemFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
@@ -158,47 +143,28 @@
 
 body {
     font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background: linear-gradient(135deg, #0a0e27, #1a1f4e, #2d1b4e);
+    background-image: linear-gradient(135deg, #000000, #cf6911); 
     display: flex;
     justify-content: center;
     align-items: center;
     height: 100vh;
     margin: 0;
     flex-direction: column;
-    position: relative;
-    overflow: hidden;
-}
-
-body::before {
-    content: '';
-    position: fixed;
-    width: 200%;
-    height: 200%;
-    top: -50%;
-    left: -50%;
-    background: radial-gradient(circle, rgba(207, 105, 17, 0.1) 0%, transparent 70%);
-    animation: shimmer 20s linear infinite;
-    pointer-events: none;
 }
 
 .container {
-    background: rgba(255, 255, 255, 0.07);
-    backdrop-filter: blur(40px);
-    -webkit-backdrop-filter: blur(40px);
-    padding: 40px;
-    border-radius: 24px;
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    background: white;
+    padding: 30px;
+    border-radius: 16px;
+    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
     text-align: center;
     width: 90%;
     max-width: 450px;
     animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    z-index: 1;
 }
 
 h1 { 
-    color: rgba(255, 255, 255, 0.95); 
+    color: #1d1d1f; 
     font-size: 22px; 
     margin-bottom: 20px; 
     font-weight: 700;
@@ -209,33 +175,28 @@ h1 {
 input[type="text"] {
     width: 100%; 
     padding: 14px; 
-    background: rgba(255, 255, 255, 0.1);
-    border: 1px solid rgba(255, 255, 255, 0.2);
-    border-radius: 12px; 
+    border: 1px solid #d2d2d7;
+    border-radius: 8px; 
     font-size: 16px; 
     box-sizing: border-box; 
     outline: none;
-    color: rgba(255, 255, 255, 0.95);
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
-    backdrop-filter: blur(10px);
-    -webkit-backdrop-filter: blur(10px);
 }
 
 input[type="text"]:focus { 
-    border-color: rgba(0, 113, 227, 0.5);
-    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.2), inset 0 1px 3px rgba(255, 255, 255, 0.1);
+    border-color: #0071e3;
+    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
     transform: scale(1.01);
-    background: rgba(255, 255, 255, 0.12);
 }
 
 input[type="text"]::placeholder {
-    color: rgba(255, 255, 255, 0.5);
+    color: #a1a1a6;
     transition: color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 input[type="text"]:focus::placeholder {
-    color: rgba(255, 255, 255, 0.6);
+    color: #d2d2d7;
 }
 
 .btn {
@@ -245,16 +206,13 @@ input[type="text"]:focus::placeholder {
     border: none;
     padding: 14px; 
     font-size: 16px; 
-    border-radius: 12px;
+    border-radius: 8px;
     cursor: pointer; 
     font-weight: 600; 
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
     animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-    backdrop-filter: blur(20px);
-    -webkit-backdrop-filter: blur(20px);
-    border: 1px solid rgba(255, 255, 255, 0.2);
 }
 
 .btn::before {
@@ -265,7 +223,7 @@ input[type="text"]:focus::placeholder {
     width: 0;
     height: 0;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(255, 255, 255, 0.3);
     transform: translate(-50%, -50%);
     transition: width 0.5s, height 0.5s;
 }
@@ -276,52 +234,50 @@ input[type="text"]:focus::placeholder {
 }
 
 .btn-go { 
-    background: rgba(0, 0, 0, 0.3);
+    background-color: #1d1d1f;
     margin-top: 15px;
     animation-delay: 0.2s;
 }
 
 .btn-go:hover { 
-    background: rgba(0, 0, 0, 0.4);
-    border-color: rgba(255, 255, 255, 0.3);
+    background-color: #333335;
     transform: translateY(-2px);
-    box-shadow: 0 20px 40px rgba(0, 0, 0, 0.3), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
 }
 
 .btn-go:active {
     transform: translateY(0);
-    box-shadow: 0 10px 20px rgba(0, 0, 0, 0.2);
+    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
 }
 
 .btn-send { 
-    background: rgba(0, 113, 227, 0.3);
+    background-color: #0071e3;
     margin-top: 25px;
     animation-delay: 0.3s;
 }
 
 .btn-send:hover { 
-    background: rgba(0, 113, 227, 0.4);
-    border-color: rgba(0, 113, 227, 0.6);
+    background-color: #0077ed;
     transform: translateY(-2px);
-    box-shadow: 0 20px 40px rgba(0, 113, 227, 0.2), inset 0 1px 2px rgba(255, 255, 255, 0.1);
+    box-shadow: 0 12px 28px rgba(0, 113, 227, 0.25);
 }
 
 .btn-send:active {
     transform: translateY(0);
-    box-shadow: 0 10px 20px rgba(0, 113, 227, 0.15);
+    box-shadow: 0 6px 14px rgba(0, 113, 227, 0.2);
 }
 
 .status { 
     margin-top: 12px; 
     font-size: 13px; 
-    color: rgba(255, 255, 255, 0.7);
+    color: #86868b;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s both;
     letter-spacing: 0.3px;
 }
 
 .status.error {
-    color: #ff6b6b;
+    color: #ff3b30;
     animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
@@ -335,13 +291,13 @@ input[type="text"]:focus::placeholder {
 }
 
 #log-list::-webkit-scrollbar-thumb {
-    background: rgba(255, 255, 255, 0.2);
+    background: rgba(0, 0, 0, 0.1);
     border-radius: 3px;
     transition: background 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 #log-list::-webkit-scrollbar-thumb:hover {
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(0, 0, 0, 0.2);
 }
     </style>
 </head>
@@ -354,6 +310,7 @@ input[type="text"]:focus::placeholder {
         <button type="submit" class="btn btn-go">Go</button>
     </form>
 
+<button id="sendLogsBtn" class="btn btn-send">Send log to Parents</button>
 <button id="sendLogsBtn" class="btn btn-send">Send log</button>
 <div id="statusMessage" class="status">0 items currently in log. Ready to send.</div>
 
@@ -371,7 +328,6 @@ input[type="text"]:focus::placeholder {
     const MAX_MAILTO_SIZE = 2000; // Safe limit for mailto body (in characters)
 
     const statusMessage = document.getElementById('statusMessage');
-    const targetInput = document.getElementById('targetInput');
 
     function getStoredHistory() {
         const history = localStorage.getItem('searchHistory');
@@ -389,12 +345,12 @@ input[type="text"]:focus::placeholder {
         while (history.length > 0) {
             const formattedLog = history.map(item => `[${item.time}] ${item.searched_for}`).join('\n');
             const body = encodeURIComponent(`Here is the search history:\n\n${formattedLog}`);
-            
+
             // If the body is within safe limits, we're done
             if (body.length <= MAX_MAILTO_SIZE) {
                 break;
             }
-            
+
             // Remove oldest entry (first in array)
             history.shift();
         }
@@ -405,25 +361,25 @@ input[type="text"]:focus::placeholder {
         const logBox = document.getElementById("log-container");
         const btn = document.getElementById("view-log-btn");
         const logList = document.getElementById("log-list");
-        
+
         if (logBox.classList.contains("hidden-log")) {
             logList.innerHTML = ""; 
             const history = getStoredHistory(); 
-            
+
             if (history.length === 0) {
-                logList.innerHTML = "<li style='color: rgba(255, 255, 255, 0.7);'>No items currently logged.</li>";
+                logList.innerHTML = "<li style='color: #333;'>No items currently logged.</li>";
             } else {
                 history.forEach(item => {
                     const li = document.createElement("li");
-                    
+
                     const otherKeys = Object.keys(item).filter(key => key !== 'time');
                     const logText = otherKeys.length > 0 ? item[otherKeys[0]] : "Unknown Entry";
-                    
+
                     li.textContent = item.time ? `[${item.time}] ${logText}` : logText;
                     logList.appendChild(li);
                 });
             }
-            
+
             logBox.classList.remove("hidden-log");
             logBox.classList.add("visible-log");
             logBox.style.display = "block";
@@ -441,7 +397,7 @@ input[type="text"]:focus::placeholder {
     }
 
     document.getElementById('searchForm').addEventListener('submit', function(e) {
-        const input = targetInput.value.trim();
+        const input = document.getElementById('targetInput').value.trim();
         let destinationUrl = "";
 
         if (input.includes('.') && !input.includes(' ')) {
@@ -459,10 +415,6 @@ input[type="text"]:focus::placeholder {
         updateStatusText();
 
         window.open(destinationUrl, '_blank');
-        
-        // Clear the input field
-        targetInput.value = '';
-        
         e.preventDefault(); 
     });
 
@@ -487,7 +439,7 @@ input[type="text"]:focus::placeholder {
         }
 
         const formattedLog = currentHistory.map(item => `[${item.time}] ${item.searched_for}`).join('\n');
-        
+
         const subject = encodeURIComponent("Search History Report");
         const body = encodeURIComponent(`Here is the search history:\n\n${formattedLog}`);
 
