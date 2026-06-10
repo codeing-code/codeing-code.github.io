@@ -4,18 +4,19 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Omniverse</title>
-    <link rel="icon" type="image/jpeg" href="https://files.aecplustech.com/eyJidWNrZXQiOiJhZWNwbHVzdGVjaC1maWxlcyIsImtleSI6InByb2ZpbGUvY2M3MjJjYzYtNzEzZi00MjM1LTkxYzgtOGYwMDYyMTcxZDNmLmpwZyIsImVkaXRzI[...]
+    <link rel="icon" type="image/jpeg" href="https://files.aecplustech.com/eyJidWNrZXQiOiJhZWNwbHVzdGVjaC1maWxlcyIsImtleSI6InByb2ZpbGUvY2M3MjJjYzYtNzEzZi00MjM1LTkxYzgtOGYwMDYyMTcxZDNmLmpwZyIsImVkaXRzI1s1c3duMjBafQ==">
     <style>
 * {
     -webkit-font-smoothing: antialiased;
     -moz-osx-font-smoothing: grayscale;
+    box-sizing: border-box;
 }
 
-/* Smooth easing functions (Apple-style) */
+/* Animations */
 @keyframes fadeInScale {
     from {
         opacity: 0;
-        transform: scale(0.95);
+        transform: scale(0.92);
     }
     to {
         opacity: 1;
@@ -26,7 +27,7 @@
 @keyframes slideInUp {
     from {
         opacity: 0;
-        transform: translateY(10px);
+        transform: translateY(15px);
     }
     to {
         opacity: 1;
@@ -59,7 +60,7 @@
 @keyframes listItemFadeIn {
     from {
         opacity: 0;
-        transform: translateX(-8px);
+        transform: translateX(-10px);
     }
     to {
         opacity: 1;
@@ -67,137 +68,115 @@
     }
 }
 
-.btn-view-log {
-    background-color: #cf6911;
-    color: white;
-    margin-top: 12px;
-    width: 100%;
-    border: none;
-    cursor: pointer;
-    font-weight: 600;
-    border-radius: 8px;
-    padding: 14px;
-    font-size: 16px;
-    transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    position: relative;
-    overflow: hidden;
+@keyframes glow {
+    0% {
+        box-shadow: 0 0 5px rgba(207, 105, 17, 0.3);
+    }
+    50% {
+        box-shadow: 0 0 15px rgba(207, 105, 17, 0.6);
+    }
+    100% {
+        box-shadow: 0 0 5px rgba(207, 105, 17, 0.3);
+    }
 }
-
-.btn-view-log:hover {
-    background-color: #87601c;
-    transform: translateY(-1px);
-    box-shadow: 0 8px 20px rgba(207, 105, 17, 0.25);
-}
-
-.btn-view-log:active {
-    transform: translateY(0);
-    box-shadow: 0 4px 10px rgba(207, 105, 17, 0.2);
-}
-
-#log-container {
-    margin-top: 20px;
-    text-align: left;
-    background-color: rgba(255, 255, 255, 0.08);
-    padding: 15px;
-    border-radius: 8px;
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    max-height: 180px;
-    overflow-y: auto;
-    width: 100%;
-    box-sizing: border-box;
-    animation: expandHeight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-#log-container.collapsing {
-    animation: collapseHeight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
-}
-
-#log-container h3 {
-    margin: 0 0 10px 0;
-    font-size: 20px;
-    color: #000000;
-    font-weight: 600;
-}
-
-#log-list {
-    list-style: none;
-    padding: 0;
-    margin: 0;
-    font-family: monospace;
-    font-size: 13px;
-    color: #000000;
-}
-
-#log-list li {
-    padding: 6px 0;
-    border-bottom: 1px solid rgba(255, 255, 255, 0.05);
-    animation: listItemFadeIn 0.3s cubic-bezier(0.34, 1.56, 0.64, 1) both;
-}
-
-#log-list li:nth-child(1) { animation-delay: 0.05s; }
-#log-list li:nth-child(2) { animation-delay: 0.1s; }
-#log-list li:nth-child(3) { animation-delay: 0.15s; }
-#log-list li:nth-child(4) { animation-delay: 0.2s; }
-#log-list li:nth-child(5) { animation-delay: 0.25s; }
-#log-list li:nth-child(n+6) { animation-delay: 0.3s; }
 
 body {
-    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Arial, sans-serif;
-    background-image: linear-gradient(135deg, #000000, #cf6911); 
+    font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", sans-serif;
+    background: linear-gradient(135deg, #0a0e27 0%, #1a1f3a 50%, #2d1b4e 100%);
     display: flex;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    min-height: 100vh;
     margin: 0;
-    flex-direction: column;
+    padding: 20px;
+    position: relative;
+    overflow-x: hidden;
+}
+
+/* Animated background elements */
+body::before {
+    content: '';
+    position: fixed;
+    top: -50%;
+    left: -50%;
+    width: 200%;
+    height: 200%;
+    background: radial-gradient(circle, rgba(207, 105, 17, 0.1) 1px, transparent 1px);
+    background-size: 50px 50px;
+    animation: drift 20s linear infinite;
+    pointer-events: none;
+    z-index: 0;
+}
+
+@keyframes drift {
+    0% { transform: translate(0, 0); }
+    100% { transform: translate(50px, 50px); }
 }
 
 .container {
-    background: white;
-    padding: 30px;
-    border-radius: 16px;
-    box-shadow: 0 4px 30px rgba(0, 0, 0, 0.05);
+    background: rgba(255, 255, 255, 0.95);
+    padding: 40px;
+    border-radius: 20px;
+    box-shadow: 0 20px 60px rgba(0, 0, 0, 0.3), 
+                0 0 40px rgba(207, 105, 17, 0.1);
     text-align: center;
-    width: 90%;
-    max-width: 450px;
-    animation: fadeInScale 0.5s cubic-bezier(0.34, 1.56, 0.64, 1);
+    width: 100%;
+    max-width: 500px;
+    animation: fadeInScale 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    position: relative;
+    z-index: 10;
+    border: 1px solid rgba(207, 105, 17, 0.2);
 }
 
 h1 { 
-    color: #1d1d1f; 
-    font-size: 22px; 
-    margin-bottom: 20px; 
+    color: #1a1a1a; 
+    font-size: 28px; 
+    margin: 0 0 12px 0;
     font-weight: 700;
-    letter-spacing: -0.3px;
-    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
+    letter-spacing: -0.5px;
+    animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1);
+    background: linear-gradient(135deg, #cf6911, #ff8c42);
+    -webkit-background-clip: text;
+    -webkit-text-fill-color: transparent;
+    background-clip: text;
+}
+
+.subtitle {
+    color: #666;
+    font-size: 13px;
+    margin-bottom: 24px;
+    animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.05s both;
+    text-transform: uppercase;
+    letter-spacing: 1px;
 }
 
 .search-input-wrapper {
     position: relative;
     width: 100%;
+    margin-bottom: 12px;
 }
 
 input[type="text"] {
     width: 100%; 
-    padding: 14px; 
-    border: 1px solid #d2d2d7;
-    border-radius: 8px; 
+    padding: 16px 18px; 
+    border: 2px solid #e5e5e7;
+    border-radius: 12px; 
     font-size: 16px; 
-    box-sizing: border-box; 
     outline: none;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+    animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.1s both;
+    background: #f9f9fb;
 }
 
 input[type="text"]:focus { 
-    border-color: #0071e3;
-    box-shadow: 0 0 0 3px rgba(0, 113, 227, 0.1);
-    transform: scale(1.01);
+    border-color: #cf6911;
+    background: white;
+    box-shadow: 0 0 0 4px rgba(207, 105, 17, 0.15);
+    transform: translateY(-2px);
 }
 
 input[type="text"]::placeholder {
     color: #a1a1a6;
-    transition: color 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
 input[type="text"]:focus::placeholder {
@@ -206,21 +185,21 @@ input[type="text"]:focus::placeholder {
 
 #autocomplete-list {
     position: absolute;
-    top: 100%;
+    top: calc(100% + 4px);
     left: 0;
     right: 0;
     background: white;
-    border: 1px solid #d2d2d7;
-    border-top: none;
-    border-radius: 0 0 8px 8px;
-    max-height: 300px;
+    border: 1px solid #e5e5e7;
+    border-radius: 12px;
+    max-height: 350px;
     overflow-y: auto;
     list-style: none;
-    padding: 0;
+    padding: 8px 0;
     margin: 0;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    box-shadow: 0 10px 30px rgba(0, 0, 0, 0.15);
     z-index: 1000;
     display: none;
+    animation: slideInUp 0.3s ease-out;
 }
 
 #autocomplete-list.show {
@@ -228,37 +207,44 @@ input[type="text"]:focus::placeholder {
 }
 
 #autocomplete-list li {
-    padding: 12px 14px;
+    padding: 12px 18px;
     cursor: pointer;
     color: #1d1d1f;
     font-size: 14px;
-    border-bottom: 1px solid #f5f5f7;
-    transition: background-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
-}
-
-#autocomplete-list li:last-child {
-    border-bottom: none;
+    transition: all 0.2s ease;
 }
 
 #autocomplete-list li:hover,
 #autocomplete-list li.selected {
     background-color: #f5f5f7;
+    padding-left: 24px;
+}
+
+.btn-group {
+    display: flex;
+    flex-direction: column;
+    gap: 12px;
+    margin-top: 24px;
+}
+
+.btn-row {
+    display: flex;
+    gap: 12px;
 }
 
 .btn {
-    margin-top: 15px; 
-    width: 100%; 
+    flex: 1;
     color: white; 
     border: none;
-    padding: 14px; 
-    font-size: 16px; 
-    border-radius: 8px;
+    padding: 14px 16px; 
+    font-size: 15px; 
+    border-radius: 10px;
     cursor: pointer; 
     font-weight: 600; 
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
     position: relative;
     overflow: hidden;
-    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) both;
 }
 
 .btn::before {
@@ -269,7 +255,7 @@ input[type="text"]:focus::placeholder {
     width: 0;
     height: 0;
     border-radius: 50%;
-    background: rgba(255, 255, 255, 0.3);
+    background: rgba(255, 255, 255, 0.4);
     transform: translate(-50%, -50%);
     transition: width 0.5s, height 0.5s;
 }
@@ -280,46 +266,116 @@ input[type="text"]:focus::placeholder {
 }
 
 .btn-go { 
-    background-color: #1d1d1f;
-    margin-top: 15px;
-    animation-delay: 0.2s;
+    background: linear-gradient(135deg, #cf6911, #ff8c42);
+    box-shadow: 0 4px 15px rgba(207, 105, 17, 0.3);
+    animation-delay: 0.15s;
 }
 
 .btn-go:hover { 
-    background-color: #333335;
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0, 0, 0, 0.15);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(207, 105, 17, 0.4);
 }
 
 .btn-go:active {
-    transform: translateY(0);
-    box-shadow: 0 6px 14px rgba(0, 0, 0, 0.1);
+    transform: translateY(-1px);
 }
 
 .btn-send { 
-    background-color: #0071e3;
-    margin-top: 25px;
-    animation-delay: 0.3s;
+    background: linear-gradient(135deg, #0071e3, #0084d4);
+    box-shadow: 0 4px 15px rgba(0, 113, 227, 0.3);
+    animation-delay: 0.2s;
 }
 
 .btn-send:hover { 
-    background-color: #0077ed;
-    transform: translateY(-2px);
-    box-shadow: 0 12px 28px rgba(0, 113, 227, 0.25);
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(0, 113, 227, 0.4);
 }
 
 .btn-send:active {
-    transform: translateY(0);
-    box-shadow: 0 6px 14px rgba(0, 113, 227, 0.2);
+    transform: translateY(-1px);
 }
 
+.btn-view-log {
+    background: linear-gradient(135deg, #6c5ce7, #a29bfe);
+    box-shadow: 0 4px 15px rgba(108, 92, 231, 0.3);
+    animation-delay: 0.25s;
+    width: 100%;
+}
+
+.btn-view-log:hover {
+    transform: translateY(-3px);
+    box-shadow: 0 8px 25px rgba(108, 92, 231, 0.4);
+}
+
+.btn-view-log:active {
+    transform: translateY(-1px);
+}
+
+#log-container {
+    margin-top: 20px;
+    background: linear-gradient(135deg, #f8f9fa, #f0f1f3);
+    padding: 18px;
+    border-radius: 12px;
+    border: 1px solid #e5e5e7;
+    max-height: 280px;
+    overflow-y: auto;
+    width: 100%;
+    animation: expandHeight 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
+    box-shadow: inset 0 2px 8px rgba(0, 0, 0, 0.05);
+}
+
+#log-container.collapsing {
+    animation: collapseHeight 0.3s cubic-bezier(0.16, 1, 0.3, 1);
+}
+
+#log-container h3 {
+    margin: 0 0 14px 0;
+    font-size: 16px;
+    color: #1a1a1a;
+    font-weight: 700;
+    text-transform: uppercase;
+    letter-spacing: 0.5px;
+}
+
+#log-list {
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    font-family: "SF Mono", Monaco, "Cascadia Code", "Roboto Mono", Menlo, monospace;
+    font-size: 12px;
+}
+
+#log-list li {
+    padding: 8px 10px;
+    border-left: 3px solid #cf6911;
+    margin-bottom: 6px;
+    background: white;
+    border-radius: 6px;
+    color: #1a1a1a;
+    animation: listItemFadeIn 0.4s cubic-bezier(0.34, 1.56, 0.64, 1) both;
+    transition: all 0.2s ease;
+}
+
+#log-list li:hover {
+    background: #fffbf7;
+    transform: translateX(2px);
+}
+
+#log-list li:nth-child(1) { animation-delay: 0.05s; }
+#log-list li:nth-child(2) { animation-delay: 0.1s; }
+#log-list li:nth-child(3) { animation-delay: 0.15s; }
+#log-list li:nth-child(4) { animation-delay: 0.2s; }
+#log-list li:nth-child(5) { animation-delay: 0.25s; }
+#log-list li:nth-child(n+6) { animation-delay: 0.3s; }
+
 .status { 
-    margin-top: 12px; 
-    font-size: 13px; 
-    color: #86868b;
+    margin-top: 14px; 
+    font-size: 12px; 
+    color: #666;
     transition: all 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
-    animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1) 0.25s both;
+    animation: slideInUp 0.7s cubic-bezier(0.34, 1.56, 0.64, 1) 0.3s both;
     letter-spacing: 0.3px;
+    text-transform: uppercase;
 }
 
 .status.error {
@@ -327,81 +383,126 @@ input[type="text"]:focus::placeholder {
     animation: slideInUp 0.4s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-/* Scroll smooth behavior */
-#log-list::-webkit-scrollbar {
+.status.success {
+    color: #34c759;
+}
+
+/* Scrollbar styling */
+#log-list::-webkit-scrollbar,
+#autocomplete-list::-webkit-scrollbar {
     width: 6px;
 }
 
-#log-list::-webkit-scrollbar-track {
+#log-list::-webkit-scrollbar-track,
+#autocomplete-list::-webkit-scrollbar-track {
     background: transparent;
 }
 
-#log-list::-webkit-scrollbar-thumb {
-    background: rgba(0, 0, 0, 0.1);
+#log-list::-webkit-scrollbar-thumb,
+#autocomplete-list::-webkit-scrollbar-thumb {
+    background: rgba(207, 105, 17, 0.3);
     border-radius: 3px;
-    transition: background 0.3s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
-#log-list::-webkit-scrollbar-thumb:hover {
-    background: rgba(0, 0, 0, 0.2);
+#log-list::-webkit-scrollbar-thumb:hover,
+#autocomplete-list::-webkit-scrollbar-thumb:hover {
+    background: rgba(207, 105, 17, 0.6);
+}
+
+@media (max-width: 480px) {
+    .container {
+        padding: 24px;
+        border-radius: 16px;
+    }
+
+    h1 {
+        font-size: 24px;
+    }
+
+    .btn {
+        padding: 12px 14px;
+        font-size: 14px;
+    }
+
+    .btn-row {
+        flex-direction: column;
+    }
 }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h1>Search securely with Brave, or type a URL.</h1>
+    <h1>Omniverse</h1>
+    <p class="subtitle">Search with privacy in mind</p>
+    
     <form id="searchForm">
         <div class="search-input-wrapper">
-            <input type="text" id="targetInput" placeholder="Type query or website address..." required autofocus>
+            <input type="text" id="targetInput" placeholder="Search Brave or enter a URL..." required autofocus>
             <ul id="autocomplete-list"></ul>
         </div>
-        <button type="submit" class="btn btn-go">Go</button>
     </form>
-    
-<button id="sendLogsBtn" class="btn btn-send">Send log</button>
-<div id="statusMessage" class="status">0 items currently in log. Ready to send.</div>
 
-<button id="view-log-btn" class="btn btn-view-log" onclick="toggleLog()">View Current Log</button>
+    <div class="btn-group">
+        <button type="submit" form="searchForm" class="btn btn-go">🚀 Go</button>
+        
+        <div class="btn-row">
+            <button id="sendLogsBtn" class="btn btn-send">📧 Send Log</button>
+            <button id="view-log-btn" class="btn btn-view-log">📋 View Log</button>
+        </div>
+    </div>
 
-<div id="log-container" class="hidden-log" style="display:none;">
-    <h3>Activity Log</h3>
-    <ul id="log-list"></ul>
-</div>
+    <div id="statusMessage" class="status">Ready to search</div>
 
+    <div id="log-container" style="display:none;">
+        <h3>Activity Log</h3>
+        <ul id="log-list"></ul>
+    </div>
 </div>
 
 <script>
     const PARENT_EMAIL = "marthawilde@gmail.com";
-    const MAX_MAILTO_SIZE = 2000; // Safe limit for mailto body (in characters)
+    const MAX_MAILTO_SIZE = 2000;
 
     const statusMessage = document.getElementById('statusMessage');
     const targetInput = document.getElementById('targetInput');
     const autocompleteList = document.getElementById('autocomplete-list');
+    const searchForm = document.getElementById('searchForm');
+
+    // Local search suggestions (no CORS issues)
+    const localSuggestions = [
+        'GitHub', 'YouTube', 'Stack Overflow', 'MDN Web Docs',
+        'CSS Tricks', 'Dev.to', 'Hacker News', 'Reddit',
+        'Wikipedia', 'Google Scholar', 'Product Hunt', 'Twitter',
+        'Medium', 'Codepen', 'GitLab', 'Vercel'
+    ];
 
     function getStoredHistory() {
-        const history = localStorage.getItem('searchHistory');
-        return history ? JSON.parse(history) : [];
+        try {
+            const history = localStorage.getItem('searchHistory');
+            return history ? JSON.parse(history) : [];
+        } catch {
+            return [];
+        }
     }
 
     function updateStatusText() {
         const count = getStoredHistory().length;
-        statusMessage.textContent = `${count} item(s) currently in log. Ready to send.`;
-        statusMessage.classList.remove('error');
+        if (count === 0) {
+            statusMessage.textContent = '✨ Ready to search';
+            statusMessage.classList.remove('error', 'success');
+        } else {
+            statusMessage.textContent = `📝 ${count} item${count !== 1 ? 's' : ''} in log`;
+            statusMessage.classList.remove('error');
+            statusMessage.classList.add('success');
+        }
     }
 
     function pruneHistoryIfNeeded(history) {
-        // Keep removing oldest entries until the mailto body fits safely
         while (history.length > 0) {
             const formattedLog = history.map(item => `[${item.time}] ${item.searched_for}`).join('\n');
             const body = encodeURIComponent(`Here is the search history:\n\n${formattedLog}`);
-
-            // If the body is within safe limits, we're done
-            if (body.length <= MAX_MAILTO_SIZE) {
-                break;
-            }
-
-            // Remove oldest entry (first in array)
+            if (body.length <= MAX_MAILTO_SIZE) break;
             history.shift();
         }
         return history;
@@ -412,71 +513,54 @@ input[type="text"]:focus::placeholder {
         const btn = document.getElementById("view-log-btn");
         const logList = document.getElementById("log-list");
 
-        if (logBox.classList.contains("hidden-log")) {
-            logList.innerHTML = ""; 
-            const history = getStoredHistory(); 
+        if (logBox.style.display === 'none') {
+            logList.innerHTML = "";
+            const history = getStoredHistory();
 
             if (history.length === 0) {
-                logList.innerHTML = "<li style='color: #333;'>No items currently logged.</li>";
+                logList.innerHTML = "<li style='border-left-color: #ccc;'>No items logged yet</li>";
             } else {
                 history.forEach(item => {
                     const li = document.createElement("li");
-
-                    const otherKeys = Object.keys(item).filter(key => key !== 'time');
-                    const logText = otherKeys.length > 0 ? item[otherKeys[0]] : "Unknown Entry";
-
-                    li.textContent = item.time ? `[${item.time}] ${logText}` : logText;
+                    li.textContent = `[${item.time}] ${item.searched_for}`;
                     logList.appendChild(li);
                 });
             }
 
-            logBox.classList.remove("hidden-log");
-            logBox.classList.add("visible-log");
             logBox.style.display = "block";
-            btn.innerText = "Hide Current Log";
+            btn.textContent = "📋 Hide Log";
         } else {
             logBox.classList.add("collapsing");
             setTimeout(() => {
-                logBox.classList.remove("visible-log");
-                logBox.classList.add("hidden-log");
-                logBox.classList.remove("collapsing");
                 logBox.style.display = "none";
-                btn.innerText = "View Current Log";
+                logBox.classList.remove("collapsing");
+                btn.textContent = "📋 View Log";
             }, 300);
         }
     }
 
-    // Autocomplete functionality using DuckDuckGo API
-    async function fetchAutocompleteSuggestions(query) {
-        if (query.trim().length < 2) {
+    document.getElementById('view-log-btn').addEventListener('click', toggleLog);
+
+    // Local autocomplete without CORS issues
+    function fetchAutocompleteSuggestions(query) {
+        if (query.trim().length < 1) {
             autocompleteList.classList.remove('show');
             return;
         }
 
-        try {
-            const response = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json`);
-            const data = await response.json();
-            
-            // Get related topics as suggestions
-            const suggestions = data.RelatedTopics
-                ? data.RelatedTopics.slice(0, 8).map(topic => topic.Text || topic.Name)
-                : [];
+        const lowerQuery = query.toLowerCase();
+        const suggestions = localSuggestions.filter(s => 
+            s.toLowerCase().includes(lowerQuery)
+        ).slice(0, 6);
 
-            // Also add the query itself as first suggestion
-            const allSuggestions = [query, ...suggestions].filter((s, i, arr) => arr.indexOf(s) === i && s);
-
-            if (allSuggestions.length > 0) {
-                displayAutocompleteSuggestions(allSuggestions);
-            } else {
-                autocompleteList.classList.remove('show');
-            }
-        } catch (error) {
-            console.error('Autocomplete error:', error);
+        if (suggestions.length > 0) {
+            displayAutocompleteSuggestions(suggestions, query);
+        } else {
             autocompleteList.classList.remove('show');
         }
     }
 
-    function displayAutocompleteSuggestions(suggestions) {
+    function displayAutocompleteSuggestions(suggestions, query) {
         autocompleteList.innerHTML = '';
         
         suggestions.forEach(suggestion => {
@@ -492,85 +576,89 @@ input[type="text"]:focus::placeholder {
         autocompleteList.classList.add('show');
     }
 
-    // Input event for autocomplete
     let autocompleteTimeout;
     targetInput.addEventListener('input', function() {
         clearTimeout(autocompleteTimeout);
         autocompleteTimeout = setTimeout(() => {
             fetchAutocompleteSuggestions(this.value);
-        }, 300);
+        }, 200);
     });
 
-    // Hide autocomplete when clicking outside
-    document.addEventListener('click', function(event) {
-        if (event.target !== targetInput) {
-            autocompleteList.classList.remove('show');
-        }
-    });
-
-    // Show autocomplete on focus if there's text
     targetInput.addEventListener('focus', function() {
-        if (this.value.trim().length >= 2) {
+        if (this.value.trim().length > 0) {
             fetchAutocompleteSuggestions(this.value);
         }
     });
 
-    document.getElementById('searchForm').addEventListener('submit', function(e) {
-        const input = document.getElementById('targetInput').value.trim();
-        let destinationUrl = "";
+    document.addEventListener('click', function(event) {
+        if (event.target !== targetInput && event.target.parentElement !== autocompleteList) {
+            autocompleteList.classList.remove('show');
+        }
+    });
 
+    searchForm.addEventListener('submit', function(e) {
+        e.preventDefault();
+        
+        const input = targetInput.value.trim();
+        if (!input) return;
+
+        let destinationUrl = "";
         if (input.includes('.') && !input.includes(' ')) {
             destinationUrl = input.startsWith('http') ? input : 'https://' + input;
         } else {
-            destinationUrl = 'https://search.brave.com/search?q=' + encodeURIComponent(input) + '&source=web';
+            destinationUrl = 'https://search.brave.com/search?q=' + encodeURIComponent(input);
         }
 
         const currentHistory = getStoredHistory();
         currentHistory.push({
-            time: new Date().toLocaleString(),
+            time: new Date().toLocaleString('en-US', { 
+                month: '2-digit', 
+                day: '2-digit', 
+                year: '2-digit',
+                hour: '2-digit',
+                minute: '2-digit',
+                second: '2-digit'
+            }),
             searched_for: input
         });
         localStorage.setItem('searchHistory', JSON.stringify(currentHistory));
         updateStatusText();
 
         window.open(destinationUrl, '_blank');
-        
-        // Clear the search box after opening the new tab
-        document.getElementById('targetInput').value = '';
+        targetInput.value = '';
         autocompleteList.classList.remove('show');
-        
-        e.preventDefault(); 
     });
 
     document.getElementById('sendLogsBtn').addEventListener('click', function() {
         let currentHistory = getStoredHistory();
 
         if (currentHistory.length === 0) {
-            statusMessage.textContent = "Log is empty! Nothing to send.";
+            statusMessage.textContent = "❌ Log is empty";
             statusMessage.classList.add('error');
+            setTimeout(() => updateStatusText(), 3000);
             return;
         }
 
-        // Prune history if it exceeds safe mailto size
         currentHistory = pruneHistoryIfNeeded(currentHistory);
 
         if (currentHistory.length === 0) {
-            statusMessage.textContent = "Error: Log entries too large to send. Cleared.";
+            statusMessage.textContent = "❌ Entries too large to send";
             statusMessage.classList.add('error');
             localStorage.removeItem('searchHistory');
-            updateStatusText();
+            setTimeout(() => updateStatusText(), 3000);
             return;
         }
 
         const formattedLog = currentHistory.map(item => `[${item.time}] ${item.searched_for}`).join('\n');
-
         const subject = encodeURIComponent("Search History Report");
         const body = encodeURIComponent(`Here is the search history:\n\n${formattedLog}`);
 
-        window.open(`mailto:${PARENT_EMAIL}?subject=${subject}&body=${body}`, '_blank');
+        window.open(`mailto:${PARENT_EMAIL}?subject=${subject}&body=${body}`);
 
+        statusMessage.textContent = "✅ Log sent successfully";
+        statusMessage.classList.add('success');
         localStorage.removeItem('searchHistory');
-        updateStatusText();
+        setTimeout(() => updateStatusText(), 3000);
     });
 
     updateStatusText();
