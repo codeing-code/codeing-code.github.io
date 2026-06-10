@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Omniverse</title>
-    <link rel="icon" type="image/jpeg" href="https://files.aecplustech.com/eyJidWNrZXQiOiJhZWNwbHVzdGVjaC1maWxlcyIsImtleSI6InByb2ZpbGUvY2M3MjJjYzYtNzEzZi00MjM1LTkxYzgtOGYwMDYyMTcxZDNmLmpwZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6NDAwLCJmaXQiOiJjb250YWluIn19fQ==">
+    <link rel="icon" type="image/jpeg" href="https://files.aecplustech.com/eyJidWNrZXQiOiJhZWNwbHVzdGVjaC1maWxlcyIsImtleSI6InByb2ZpbGUvY2M3MjJjYzYtNzEzZi00MjM1LTkxYzgtOGYwMDYyMTcxZDNmLmpwZyIsImVkaXRzI[...]
     <style>
 * {
     -webkit-font-smoothing: antialiased;
@@ -172,6 +172,11 @@ h1 {
     animation: slideInUp 0.6s cubic-bezier(0.34, 1.56, 0.64, 1);
 }
 
+.search-input-wrapper {
+    position: relative;
+    width: 100%;
+}
+
 input[type="text"] {
     width: 100%; 
     padding: 14px; 
@@ -197,6 +202,47 @@ input[type="text"]::placeholder {
 
 input[type="text"]:focus::placeholder {
     color: #d2d2d7;
+}
+
+#autocomplete-list {
+    position: absolute;
+    top: 100%;
+    left: 0;
+    right: 0;
+    background: white;
+    border: 1px solid #d2d2d7;
+    border-top: none;
+    border-radius: 0 0 8px 8px;
+    max-height: 300px;
+    overflow-y: auto;
+    list-style: none;
+    padding: 0;
+    margin: 0;
+    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.1);
+    z-index: 1000;
+    display: none;
+}
+
+#autocomplete-list.show {
+    display: block;
+}
+
+#autocomplete-list li {
+    padding: 12px 14px;
+    cursor: pointer;
+    color: #1d1d1f;
+    font-size: 14px;
+    border-bottom: 1px solid #f5f5f7;
+    transition: background-color 0.2s cubic-bezier(0.34, 1.56, 0.64, 1);
+}
+
+#autocomplete-list li:last-child {
+    border-bottom: none;
+}
+
+#autocomplete-list li:hover,
+#autocomplete-list li.selected {
+    background-color: #f5f5f7;
 }
 
 .btn {
@@ -306,7 +352,10 @@ input[type="text"]:focus::placeholder {
 <div class="container">
     <h1>Search securely with Brave, or type a URL.</h1>
     <form id="searchForm">
-        <input type="text" id="targetInput" placeholder="Type query or website address..." required autofocus>
+        <div class="search-input-wrapper">
+            <input type="text" id="targetInput" placeholder="Type query or website address..." required autofocus>
+            <ul id="autocomplete-list"></ul>
+        </div>
         <button type="submit" class="btn btn-go">Go</button>
     </form>
     
@@ -327,6 +376,8 @@ input[type="text"]:focus::placeholder {
     const MAX_MAILTO_SIZE = 2000; // Safe limit for mailto body (in characters)
 
     const statusMessage = document.getElementById('statusMessage');
+    const targetInput = document.getElementById('targetInput');
+    const autocompleteList = document.getElementById('autocomplete-list');
 
     function getStoredHistory() {
         const history = localStorage.getItem('searchHistory');
@@ -395,6 +446,75 @@ input[type="text"]:focus::placeholder {
         }
     }
 
+    // Autocomplete functionality using DuckDuckGo API
+    async function fetchAutocompleteSuggestions(query) {
+        if (query.trim().length < 2) {
+            autocompleteList.classList.remove('show');
+            return;
+        }
+
+        try {
+            const response = await fetch(`https://api.duckduckgo.com/?q=${encodeURIComponent(query)}&format=json`);
+            const data = await response.json();
+            
+            // Get related topics as suggestions
+            const suggestions = data.RelatedTopics
+                ? data.RelatedTopics.slice(0, 8).map(topic => topic.Text || topic.Name)
+                : [];
+
+            // Also add the query itself as first suggestion
+            const allSuggestions = [query, ...suggestions].filter((s, i, arr) => arr.indexOf(s) === i && s);
+
+            if (allSuggestions.length > 0) {
+                displayAutocompleteSuggestions(allSuggestions);
+            } else {
+                autocompleteList.classList.remove('show');
+            }
+        } catch (error) {
+            console.error('Autocomplete error:', error);
+            autocompleteList.classList.remove('show');
+        }
+    }
+
+    function displayAutocompleteSuggestions(suggestions) {
+        autocompleteList.innerHTML = '';
+        
+        suggestions.forEach(suggestion => {
+            const li = document.createElement('li');
+            li.textContent = suggestion;
+            li.addEventListener('click', () => {
+                targetInput.value = suggestion;
+                autocompleteList.classList.remove('show');
+            });
+            autocompleteList.appendChild(li);
+        });
+
+        autocompleteList.classList.add('show');
+    }
+
+    // Input event for autocomplete
+    let autocompleteTimeout;
+    targetInput.addEventListener('input', function() {
+        clearTimeout(autocompleteTimeout);
+        autocompleteTimeout = setTimeout(() => {
+            fetchAutocompleteSuggestions(this.value);
+        }, 300);
+    });
+
+    // Hide autocomplete when clicking outside
+    document.addEventListener('click', function(event) {
+        if (event.target !== targetInput) {
+            autocompleteList.classList.remove('show');
+        }
+    });
+
+    // Show autocomplete on focus if there's text
+    targetInput.addEventListener('focus', function() {
+        if (this.value.trim().length >= 2) {
+            fetchAutocompleteSuggestions(this.value);
+        }
+    });
+
     document.getElementById('searchForm').addEventListener('submit', function(e) {
         const input = document.getElementById('targetInput').value.trim();
         let destinationUrl = "";
@@ -414,6 +534,11 @@ input[type="text"]:focus::placeholder {
         updateStatusText();
 
         window.open(destinationUrl, '_blank');
+        
+        // Clear the search box after opening the new tab
+        document.getElementById('targetInput').value = '';
+        autocompleteList.classList.remove('show');
+        
         e.preventDefault(); 
     });
 
