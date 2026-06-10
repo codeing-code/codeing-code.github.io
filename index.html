@@ -4,7 +4,7 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Omniverse</title>
-    <link rel="icon" type="image/jpeg" href="https://files.aecplustech.com/eyJidWNrZXQiOiJhZWNwbHVzdGVjaC1maWxlcyIsImtleSI6InByb2ZpbGUvY2M3MjJjYzYtNzEzZi00MjM1LTkxYzgtOGYwMDYyMTcxZDNmLmpwZyIsImVkaXRzIjp7InJlc2l6ZSI6eyJ3aWR0aCI6NDAwLCJmaXQiOiJjb250YWluIn19fQ==">
+    <link rel="icon" type="image/png" href="https://catalogartifact.azureedge.net/publicartifacts/nvidia.ov-developer-workstation-ddb47280-3d61-4436-acbb-3ab3cd9db12a/6e962f16-5710-4247-99b4-bb1ad978009a_nvidia-omniverse-launcher-216.png">
     <style>
 * {
     -webkit-font-smoothing: antialiased;
@@ -305,17 +305,10 @@ input[type="text"]:focus::placeholder {
 
 <div class="container">
     <h1>Search securely with Brave, or type a URL.</h1>
-    <form id="searchForm">
-        <input type="text" id="targetInput" placeholder="Type query or website address..." required autofocus>
-        <button type="submit" class="btn btn-go">Go</button>
-    </form>
-
-    <form autocomplete="off" method="post" action="">
-        <input autocomplete="false" name="hidden" type="text" style="display:none;">
-    </form>
-    
-
-<button id="sendLogsBtn" class="btn btn-send">Send log to Parents</button>
+    <form id="searchform" autocomplete="new-password">
+      <input type="text" name="target" placeholder="Type query or website address..." required autofocus autocomplete="off">
+      <button type="submit" class="btn btn-go">Go</button>
+    </form>   
     
 <button id="sendLogsBtn" class="btn btn-send">Send log</button>
 <div id="statusMessage" class="status">0 items currently in log. Ready to send.</div>
