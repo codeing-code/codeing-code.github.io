@@ -200,46 +200,6 @@ input[type="text"]:focus::placeholder {
     color: rgba(255, 255, 255, 0.7);
 }
 
-#autocomplete-list {
-    position: absolute;
-    top: calc(100% + 8px);
-    left: 0;
-    right: 0;
-    background: rgba(255, 255, 255, 0.08);
-    border: 1px solid rgba(255, 255, 255, 0.15);
-    border-radius: 14px;
-    max-height: 350px;
-    overflow-y: auto;
-    list-style: none;
-    padding: 8px 0;
-    margin: 0;
-    box-shadow: 0 8px 32px rgba(0, 0, 0, 0.4);
-    z-index: 1000;
-    display: none;
-    animation: slideInUp 0.3s ease-out;
-}
-
-#autocomplete-list.show {
-    display: block;
-}
-
-#autocomplete-list li {
-    padding: 14px 20px;
-    cursor: pointer;
-    color: var(--text-secondary);
-    font-size: 15px;
-    transition: all 0.2s ease;
-    border-left: 3px solid transparent;
-}
-
-#autocomplete-list li:hover,
-#autocomplete-list li.selected {
-    background-color: rgba(0, 212, 255, 0.1);
-    color: var(--text-primary);
-    border-left-color: var(--primary);
-    padding-left: 24px;
-}
-
 .btn-group {
     display: flex;
     flex-direction: column;
@@ -431,24 +391,20 @@ input[type="text"]:focus::placeholder {
 
 /* Scrollbar styling */
 #log-list::-webkit-scrollbar,
-#autocomplete-list::-webkit-scrollbar {
     width: 6px;
 }
 
 #log-list::-webkit-scrollbar-track,
-#autocomplete-list::-webkit-scrollbar-track {
     background: transparent;
 }
 
 #log-list::-webkit-scrollbar-thumb,
-#autocomplete-list::-webkit-scrollbar-thumb {
     background: rgba(0, 212, 255, 0.3);
     border-radius: 3px;
     transition: background 0.3s;
 }
 
 #log-list::-webkit-scrollbar-thumb:hover,
-#autocomplete-list::-webkit-scrollbar-thumb:hover {
     background: rgba(0, 212, 255, 0.6);
 }
 
@@ -500,23 +456,22 @@ input[type="text"]:focus::placeholder {
     <form id="searchForm">
         <div class="search-input-wrapper">
             <input type="text" id="targetInput" placeholder="Search or enter a URL..." required autofocus>
-            <ul id="autocomplete-list"></ul>
         </div>
     </form>
 
     <div class="btn-group">
-        <button type="submit" form="searchForm" class="btn btn-go">🚀 Go</button>
+        <button type="submit" form="searchForm" class="btn btn-go">Go</button>
 
         <div class="btn-row">
-            <button id="sendLogsBtn" class="btn btn-send">📧 Send Log</button>
-            <button id="view-log-btn" class="btn btn-view-log">📋 View Log</button>
+            <button id="sendLogsBtn" class="btn btn-send">Send Log</button>
+            <button id="view-log-btn" class="btn btn-view-log">View Log</button>
         </div>
     </div>
 
-    <div id="statusMessage" class="status">✨ Ready to search</div>
+    <div id="statusMessage" class="status">Ready to search</div>
 
     <div id="log-container" style="display:none;">
-        <h3>📝 Activity Log</h3>
+        <h3>Activity Log</h3>
         <ul id="log-list"></ul>
     </div>
 </div>
@@ -529,14 +484,6 @@ input[type="text"]:focus::placeholder {
     const targetInput = document.getElementById('targetInput');
     const autocompleteList = document.getElementById('autocomplete-list');
     const searchForm = document.getElementById('searchForm');
-
-    // Enhanced search suggestions
-    const localSuggestions = [
-        'GitHub', 'YouTube', 'Stack Overflow', 'MDN Web Docs',
-        'CSS Tricks', 'Dev.to', 'Hacker News', 'Reddit',
-        'Wikipedia', 'Google Scholar', 'Product Hunt', 'Twitter/X',
-        'Medium', 'Codepen', 'GitLab', 'Vercel', 'NPM', 'Rust Docs'
-    ];
 
     function getStoredHistory() {
         try {
@@ -559,10 +506,10 @@ input[type="text"]:focus::placeholder {
     function updateStatusText() {
         const count = getStoredHistory().length;
         if (count === 0) {
-            statusMessage.textContent = '✨ Ready to search';
+            statusMessage.textContent = 'Ready to search';
             statusMessage.classList.remove('error', 'success');
         } else {
-            statusMessage.textContent = `📝 ${count} item${count !== 1 ? 's' : ''} in log`;
+            statusMessage.textContent = `${count} item${count !== 1 ? 's' : ''} in log`;
             statusMessage.classList.remove('error');
             statusMessage.classList.add('success');
         }
@@ -599,13 +546,13 @@ input[type="text"]:focus::placeholder {
             }
 
             logBox.style.display = "block";
-            btn.textContent = "📋 Hide Log";
+            btn.textContent = "Hide Log";
         } else {
             logBox.classList.add("collapsing");
             setTimeout(() => {
                 logBox.style.display = "none";
                 logBox.classList.remove("collapsing");
-                btn.textContent = "📋 View Log";
+                btn.textContent = "View Log";
             }, 300);
         }
     }
@@ -703,7 +650,7 @@ input[type="text"]:focus::placeholder {
         let currentHistory = getStoredHistory();
 
         if (currentHistory.length === 0) {
-            statusMessage.textContent = "❌ Log is empty";
+            statusMessage.textContent = "Log is empty";
             statusMessage.classList.add('error');
             setTimeout(() => updateStatusText(), 3000);
             return;
@@ -712,7 +659,7 @@ input[type="text"]:focus::placeholder {
         currentHistory = pruneHistoryIfNeeded(currentHistory);
 
         if (currentHistory.length === 0) {
-            statusMessage.textContent = "❌ Entries too large to send";
+            statusMessage.textContent = "Entries too large to send";
             statusMessage.classList.add('error');
             saveHistory([]);
             setTimeout(() => updateStatusText(), 3000);
@@ -725,7 +672,7 @@ input[type="text"]:focus::placeholder {
 
         window.open(`mailto:${PARENT_EMAIL}?subject=${subject}&body=${body}`);
 
-        statusMessage.textContent = "✅ Log sent successfully";
+        statusMessage.textContent = "Log sent successfully";
         statusMessage.classList.add('success');
         saveHistory([]);
         setTimeout(() => updateStatusText(), 3000);
